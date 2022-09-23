@@ -65,13 +65,28 @@ end
     it "passwordは英数字混合でないと登録できない" do
       @user.password = "000000"
       @user.valid?
-      expect(@user.errors.full_messages).to include("Password には英字と数字の両方を含めて設定してください")
+      expect(@user.errors.full_messages).to include("Password には半角英字と半角数字の両方を含めて設定してください")
     end
     it 'passwordとpassword_confirmationが不一致では登録できない' do
       @user.password = '123456'
       @user.password_confirmation = '1234567'
       @user.valid?
       expect(@user.errors.full_messages).to include("Password confirmation doesn't match Password")
+    end
+    it "passwordは英字のみでは登録できない" do
+      @user.password = "aaaaaa"
+      @user.valid?
+      expect(@user.errors.full_messages).to include("Password には半角英字と半角数字の両方を含めて設定してください")
+    end
+    it "passwordは数字のみでは登録できない" do
+      @user.password = "000000"
+      @user.valid?
+      expect(@user.errors.full_messages).to include("Password には半角英字と半角数字の両方を含めて設定してください")
+    end
+    it "passwordは全角では登録できない" do
+      @user.password = '１あああああ'
+      @user.valid?
+      expect(@user.errors.full_messages).to include("Password には半角英字と半角数字の両方を含めて設定してください")
     end
     it 'first_nameが空では登録できない' do
       @user.first_name = ''
