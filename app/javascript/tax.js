@@ -1,12 +1,11 @@
 function tax() {
   const itemPrice = document.getElementById("item-price");
-  console.log("itemPrice")
     itemPrice.addEventListener('change', () => {
       const price = itemPrice.value;
       const addTaxPrice = document.getElementById("add-tax-price");
       const profit = document.getElementById("profit");
-      const taxPrice = price * 0.1;
-      const saleProfit = price - taxPrice;
+      const taxPrice = (Math.floor(price * 0.1));
+      const saleProfit = (Math.floor(price - taxPrice));
 
       addTaxPrice.innerHTML = taxPrice;
       profit.innerHTML = saleProfit; 
