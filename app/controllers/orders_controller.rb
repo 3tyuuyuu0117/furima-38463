@@ -1,16 +1,16 @@
 class OrdersController < ApplicationController
-  before_action :authenticate_user!, except: :index
-  before_action :prevent_url
+  before_action :authenticate_user!
+  before_action :set_item
   before_action :sold_edit
 
 
   def index
-    @item = Item.find(params[:item_id])
+    redirect_to root_path if current_user == @item.user
     @purchase_order = PurchaseOrder.new
   end
 
   def create
-    @item = Item.find(params[:item_id])
+    redirect_to root_path if current_user == @item.user
     @purchase_order = PurchaseOrder.new(order_params)
     if @purchase_order.valid?
       pay_item
@@ -36,15 +36,13 @@ class OrdersController < ApplicationController
       currency: 'jpy'
     )
   end
-  
-  def prevent_url
-    if current_user.id == @item.user.id
-      redirect_to root_path
-    end
+
+  def set_item
+    @item = Item.find(params[:item_id])
   end
 
   def sold_edit
-    if @item.purchase.present?
-      redirect_to root_path
-    end
+    redirect_to root_path if @item.purchase.present?
   end
+  
+end
