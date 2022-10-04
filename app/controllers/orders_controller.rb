@@ -1,16 +1,15 @@
 class OrdersController < ApplicationController
   before_action :authenticate_user!
   before_action :set_item
+  before_action :prevent_url
   before_action :sold_edit
 
 
   def index
-    redirect_to root_path if current_user == @item.user
     @purchase_order = PurchaseOrder.new
   end
 
   def create
-    redirect_to root_path if current_user == @item.user
     @purchase_order = PurchaseOrder.new(order_params)
     if @purchase_order.valid?
       pay_item
@@ -40,6 +39,11 @@ class OrdersController < ApplicationController
   def set_item
     @item = Item.find(params[:item_id])
   end
+
+  def prevent_url
+    redirect_to root_path if current_user == @item.user
+  end
+
 
   def sold_edit
     redirect_to root_path if @item.purchase.present?
